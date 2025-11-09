@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import os
 import base64
 
-st.set_page_config(page_title="Daggerheart Story", page_icon="🗡️")
+st.set_page_config(page_title="Daggerheart Story", page_icon="🗡️", layout="wide")
 
 st.markdown(
     """
@@ -15,6 +15,16 @@ st.markdown(
         text-align: center;
         margin-bottom: 30px;
         text-shadow: 2px 2px 4px #000000;
+    }
+    .banner-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .banner-img {
+        width: 33.33%;
+        max-width: 500px;
+        height: auto;
     }
     </style>
     """,
@@ -28,7 +38,7 @@ def image_to_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-# Преобразуем локальное изображение в base64
+#изображение в base64
 lith_img_base64 = ""
 if os.path.exists("img/lith.jpg"):
     lith_img_base64 = f"data:image/jpeg;base64,{image_to_base64('img/lith.jpg')}"
@@ -43,17 +53,28 @@ characters = [
 ]
 
 chars_html = """
+<!DOCTYPE html>
+<html>
+<head>
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    width: 100%;
+    overflow: hidden;
+}
 .char-row {
     display: flex;
     flex-direction: row;
     gap: 30px;
     justify-content: center;
     align-items: flex-start;
-    margin-bottom: 40px;
-    overflow-x: auto;
-    padding-bottom: 8px;
+    padding: 20px;
     flex-wrap: nowrap;
+    width: 100%;
 }
 .char-block {
     display: flex;
@@ -82,6 +103,8 @@ chars_html = """
     width: 100%;
 }
 </style>
+</head>
+<body>
 <div class="char-row">
 """
 
@@ -93,11 +116,18 @@ for char in characters:
     </div>
     '''
 
-chars_html += '</div>'
+chars_html += """
+</div>
+</body>
+</html>
+"""
 
-components.html(chars_html, height=250)
+components.html(chars_html, height=240)
+
 
 if os.path.exists("img/Burachstandard.png"):
-    st.image("img/Burachstandard.png", use_container_width=True)
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        st.image("img/Burachstandard.png", use_container_width=True)
 else:
     st.info("img/Burachstandard.png не найден")
